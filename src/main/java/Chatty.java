@@ -43,14 +43,12 @@ public class Chatty {
                             System.out.println("Nice! I've marked this task as done:");
                             System.out.println("   " + task);
                         }
-                    }
-                    else {
+                    } else {
                         System.out.println("No such item");
                     }
                 } else {
                     if (s.contains("todo")) {
-
-                        Pattern titlePattern = Pattern.compile("o\s*(.*?)");
+                        Pattern titlePattern = Pattern.compile("todo\\s*(.*)");
                         Matcher titlePatternMatcher = titlePattern.matcher(s);
                         String todoTitle = "";
                         if (titlePatternMatcher.find()) {
@@ -63,8 +61,9 @@ public class Chatty {
                         Todo t = new Todo(todoTitle);
                         userInputs.add(t);
                         System.out.println("Got it. I've added this task:\n  " + t);
+                        System.out.println("Now you have " + userInputs.size() + " items in the list.");
                     } else if (s.contains("event")) {
-                        Pattern titlePattern = Pattern.compile("t\s*(.*?)\s+/");
+                        Pattern titlePattern = Pattern.compile("event\s*(.*?)\s+/");
                         Matcher titlePatternMatcher = titlePattern.matcher(s);
                         String eventTitle = "";
                         if (titlePatternMatcher.find()) {
@@ -95,8 +94,9 @@ public class Chatty {
                         Event e = new Event(eventTitle, fromString, toString);
                         userInputs.add(e);
                         System.out.println("Got it. I've added this task:\n  " + e);
+                        System.out.println("Now you have " + userInputs.size() + " items in the list.");
                     } else if (s.contains("deadline")) {
-                        Pattern titlePattern = Pattern.compile("e\s*(.*?)\s+/");
+                        Pattern titlePattern = Pattern.compile("deadline\s*(.*?)\s+/");
                         Matcher titlePatternMatcher = titlePattern.matcher(s);
                         String deadlineTitle = "";
                         if (titlePatternMatcher.find()) {
@@ -118,12 +118,17 @@ public class Chatty {
                         Deadline d = new Deadline(deadlineTitle, byString);
                         userInputs.add(d);
                         System.out.println("Got it. I've added this task:\n  " + d);
+                        System.out.println("Now you have " + userInputs.size() + " items in the list.");
 
+                    } else {
+                        System.out.println("Invalid item");
                     }
 
                 }
             } catch (IOException ioe) {
                 System.out.println(ioe);
+            } finally {
+                System.out.println("-----------------------------------------");
             }
 
         }
