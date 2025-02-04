@@ -10,19 +10,18 @@ public class Chatty {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Hello! I'm Chatty McChatface");
         System.out.println("What can I do for you?");
-        String s = "";
         ArrayList<Task> userInputs = new ArrayList<Task>();
-
-        while (true) {
-            try {
-                s = br.readLine();
+        try {
+            String s = br.readLine();
+            while (s != null) {
+                System.out.println("____________________________________________________________");
                 if (s.equals("bye") || s.equals("Bye")) {
                     System.out.println("Bye. Hope to see you again soon!");
                     br.close();
                     break;
                 } else if (s.equals("list")) {
                     int i = 0;
-                    System.out.println("Here are the tasks in your list: ");
+                    System.out.println("Here are the tasks in your list:");
                     while (i != userInputs.size()) {
                         System.out.println(String.valueOf(i + 1) + ". " + userInputs.get(i));
                         i++;
@@ -31,21 +30,42 @@ public class Chatty {
                     Pattern p = Pattern.compile("([0-9]+$)");
                     Matcher m = p.matcher(s);
                     if (m.find()) {
-                        System.out.println(m.group(1));
                         int i = Integer.parseInt(m.group(1)) - 1;
-                        Task task = userInputs.get(i);
-                        if (s.contains("unmark")) {
-                            task.unmark();
-                            System.out.println("OK, I've marked this task as not done yet:");
+                        if (i < userInputs.size()) {
+                            Task task = userInputs.get(i);
+                            if (s.contains("unmark")) {
+                                task.unmark();
+                                System.out.println("OK, I've marked this task as not done yet:");
+                                System.out.println("   " + task);
+                            } else if (s.contains("mark")) {
+                                task.mark();
+                                System.out.println("Nice! I've marked this task as done:");
+                                System.out.println("   " + task);
+                            }
+                        } else {
+                            System.out.println("Invalid item");
+                        }
+                    } else {
+                        System.out.println("Invalid item");
+                    }
+                } else if (s.contains("delete")) {
+                    Pattern p = Pattern.compile("([0-9]+$)");
+                    Matcher m = p.matcher(s);
+                    if (m.find()) {
+                        int i = Integer.parseInt(m.group(1)) - 1;
+                        if (i < userInputs.size()) {
+                            Task task = userInputs.get(i);
+                            System.out.println("Noted. I've removed this task:");
                             System.out.println("   " + task);
-                        } else if (s.contains("mark")) {
-                            task.mark();
-                            System.out.println("Nice! I've marked this task as done:");
-                            System.out.println("   " + task);
+                            userInputs.remove(i);
+                            System.out.println("Now you have " + userInputs.size() + " items in the list.");
+                        } else {
+                            System.out.println("Invalid item");
                         }
                     } else {
                         System.out.println("No such item");
                     }
+
                 } else {
                     if (s.contains("todo")) {
                         Pattern titlePattern = Pattern.compile("todo\\s*(.*)");
@@ -55,7 +75,6 @@ public class Chatty {
                             todoTitle = titlePatternMatcher.group(1);
                         } else {
                             System.out.println("Invalid title");
-                            break;
                         }
 
                         Todo t = new Todo(todoTitle);
@@ -70,7 +89,6 @@ public class Chatty {
                             eventTitle = titlePatternMatcher.group(1);
                         } else {
                             System.out.println("Invalid title");
-                            break;
                         }
 
                         Pattern fromPattern = Pattern.compile("/from\s*(.*?)\s+/");
@@ -103,7 +121,6 @@ public class Chatty {
                             deadlineTitle = titlePatternMatcher.group(1);
                         } else {
                             System.out.println("Invalid title");
-                            break;
                         }
 
                         Pattern byPattern = Pattern.compile("/by\\s*(.*)");
@@ -122,15 +139,14 @@ public class Chatty {
 
                     } else {
                         System.out.println("Invalid item");
+                        break;
                     }
-
                 }
-            } catch (IOException ioe) {
-                System.out.println(ioe);
-            } finally {
-                System.out.println("-----------------------------------------");
+                s = br.readLine();
             }
-
+        } catch (IOException e) {
+            System.out.println("input error");
         }
+
     }
 }
