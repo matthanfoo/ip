@@ -1,16 +1,18 @@
+import java.time.LocalDateTime;
+
 public class Event extends Task {
 
-    protected String start;
-    protected String end;
-
-    public Event(String description, String start, String end) {
-        super(description);
-        this.start = start;
-        this.end = end;
+    public Event(String description, LocalDateTime start, LocalDateTime end) {
+        super(description, start, end);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
+        return "[E]" + super.toString() + " (from: " + dt1 + " to: " + dt2 + ")";
+    }
+
+    public String toCsvFormat() {
+        String doneText = this.isDone ? "X" : " ";
+        return "E," + description + "," + doneText + "," + dt1 + "," + dt2;
     }
 }

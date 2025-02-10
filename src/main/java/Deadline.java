@@ -1,14 +1,18 @@
+import java.time.LocalDateTime;
+
 public class Deadline extends Task {
 
-    protected String by;
-
-    public Deadline(String description, String by) {
-        super(description);
-        this.by = by;
+    public Deadline(String description, LocalDateTime by) {
+        super(description, by, LocalDateTime.of(1990, 01, 01, 00, 00, 00, 00));
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + dt1 + ")";
+    }
+
+    public String toCsvFormat() {
+        String doneText = this.isDone ? "X" : " ";
+        return "D," + description + "," + doneText + "," + dt1 + ", ";
     }
 }

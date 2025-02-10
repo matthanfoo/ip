@@ -1,11 +1,18 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+
 public class Task {
     protected String description;
     protected boolean isDone;
+    protected LocalDateTime dt1;
+    protected LocalDateTime dt2;
 
-
-    public Task(String description) {
+    public Task(String description, LocalDateTime dt1, LocalDateTime dt2) {
         this.description = description;
         this.isDone = false;
+        this.dt1 = dt1;
+        this.dt2 = dt2;
     }
 
     public String getStatusIcon() {
@@ -22,6 +29,10 @@ public class Task {
 
     public String toString() {
         return " [" + this.getStatusIcon() + "] " + this.description;
+    }
+
+    public String toCsvFormat() {
+        return "";
     }
 
 
