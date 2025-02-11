@@ -36,8 +36,6 @@ public class Chatty {
         return matcher.matches();
     }
 
-
-
     public static String readInputIntoIso(String input) throws Exception { // need to throw exception
         // validates expected format either "dd-mm-yyyy" or "dd-mm-yyyy hh:mm" --> return "dd-mm-yyyy hh:mm"
 
@@ -48,23 +46,23 @@ public class Chatty {
             if (validateDate(dateitems[0])) {
                 date = dateitems[0];
             } else {
-                throw new Exception("invalid date, the accepted format is dd-mm-yyyy");
+                throw new Exception("invalid date, the accepted format is dd-mm-yyyy, input: " + input);
             }
 
             if (validateTime(dateitems[1])) {
                 time = dateitems[1];
             } else {
-                throw new Exception("invalid time, the accepted format is HH:mm (24-hour time)");
+                throw new Exception("invalid time, the accepted format is HH:mm (24-hour time), input: " + input);
             }
         } else if (dateitems.length == 1) {
             if (validateDate(dateitems[0])) {
                 date = dateitems[0];
                 time = "00:00";
             } else {
-                throw new Exception("invalid date, the accepted format is dd-mm-yyyy");
+                throw new Exception("invalid date, the accepted format is dd-mm-yyyy, input: " + input);
             }
         } else {
-            throw new Exception("invalid date, the accepted format is dd-mm-yyyy");
+            throw new Exception("invalid date, the accepted format is dd-mm-yyyy, input: " + input);
         }
 
         return date + " " + time;
@@ -155,14 +153,30 @@ public class Chatty {
                     break;
                 } else if (s.equals("list")) {
                     int i = 0;
-                    System.out.println("Here are the tasks in your list:");
-                    while (i != userInputs.size()) {
-                        System.out.println(String.valueOf(i + 1) + ". " + userInputs.get(i));
-                        i++;
+                    if (!userInputs.isEmpty()) {
+                        System.out.println("Here are the tasks in your list:");
+                        while (i != userInputs.size()) {
+                            System.out.println(String.valueOf(i + 1) + ". " + userInputs.get(i));
+                            i++;
+                        }
+                    } else {
+                        System.out.println("There are no tasks in your list");
                     }
-                } else if (s.equals("today")) {
-                    for (Task task : userInputs) {
 
+                } else if (s.equals("today")) {
+                    ArrayList<Task> todayTasks = new ArrayList<Task>();
+                    for (Task task : userInputs) {
+                        if (task.getDt1().toLocalDate().equals(LocalDateTime.now().toLocalDate())) {
+                            todayTasks.add(task);
+                        }
+                    }
+                    if (!todayTasks.isEmpty()) {
+                        System.out.println("Here are your tasks for today: ");
+                        for (Task task : todayTasks) {
+                            System.out.println(task);
+                        }
+                    } else {
+                        System.out.println("No tasks for today!");
                     }
                 } else if (s.contains("mark")) {
                     Pattern p = Pattern.compile("([0-9]+$)");
@@ -304,6 +318,7 @@ public class Chatty {
                         continue;
                     }
                 }
+                System.out.println("____________________________________________________________");
             }
             readInputsToFile(userInputs);
         } catch (IOException e) {

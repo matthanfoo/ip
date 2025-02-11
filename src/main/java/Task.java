@@ -31,6 +31,10 @@ public class Task {
         return " [" + this.getStatusIcon() + "] " + this.description;
     }
 
+    public LocalDateTime getDt1() {
+        return dt1;
+    }
+
     public String toCsvFormat() {
         return "";
     }
