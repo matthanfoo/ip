@@ -1,3 +1,4 @@
+package tasks;
 import java.time.LocalDateTime;
 
 public class Deadline extends Task {
@@ -12,7 +13,6 @@ public class Deadline extends Task {
     }
 
     public String toCsvFormat() {
-        String doneText = this.isDone ? "X" : " ";
-        return "D," + description + "," + doneText + "," + dt1 + ", ";
+        return "D," + super.toCsvFormat();
     }
 }

@@ -1,3 +1,4 @@
+package tasks;
 import java.time.LocalDateTime;
 
 public class Todo extends Task {
@@ -12,7 +13,6 @@ public class Todo extends Task {
     }
 
     public String toCsvFormat() {
-        String doneText = this.isDone ? "X" : " ";
-        return "T," + description + "," + doneText + ", , ";
+        return "T," + super.toCsvFormat();
     }
 }
