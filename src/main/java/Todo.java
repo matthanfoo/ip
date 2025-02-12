@@ -12,7 +12,6 @@ public class Todo extends Task {
     }
 
     public String toCsvFormat() {
-        String doneText = this.isDone ? "X" : " ";
-        return "T," + description + "," + doneText + ", , ";
+        return "T," + super.toCsvFormat();
     }
 }

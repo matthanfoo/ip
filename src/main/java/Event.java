@@ -12,7 +12,6 @@ public class Event extends Task {
     }
 
     public String toCsvFormat() {
-        String doneText = this.isDone ? "X" : " ";
-        return "E," + description + "," + doneText + "," + dt1 + "," + dt2;
+        return "E," + super.toCsvFormat();
     }
 }

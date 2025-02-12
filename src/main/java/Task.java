@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Task {
@@ -7,6 +8,7 @@ public class Task {
     protected boolean isDone;
     protected LocalDateTime dt1;
     protected LocalDateTime dt2;
+    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public Task(String description, LocalDateTime dt1, LocalDateTime dt2) {
         this.description = description;
@@ -36,7 +38,8 @@ public class Task {
     }
 
     public String toCsvFormat() {
-        return "";
+        String doneText = this.isDone ? "X" : " ";
+        return description + "," + doneText + "," + dt1.format(dateTimeFormatter)+ "," + dt2.format(dateTimeFormatter);
     }
 
 
