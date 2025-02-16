@@ -100,6 +100,9 @@ public class Parser {
         } else if (command.contains("delete")) {
             int markIndex = parseMark(command);
             printText = markIndex < 0 ? "Invalid input" : tasks.deleteTask(markIndex);
+        } else if (command.contains("find")) {
+            String findText = parseRegex(command, "find\s*(.*)");
+            printText = tasks.find(findText);
         } else if (command.contains("todo")) {
             String todoTitle = parseTitle(command, "todo");
             printText = todoTitle.equals("") ? "Invalid task title" : tasks.createTodo(todoTitle);

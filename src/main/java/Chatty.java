@@ -13,7 +13,12 @@ public class Chatty {
         ui = new UI(storage, tasks);
     }
 
+    /**
+     * this function initialises a new Parser object and starts uses the user interface to welcome the user
+     * to the chatbot and read any further input until the user chooses to exit the chatbot
+     */
     public void run() {
+
         Parser parser = new Parser();
         boolean running = true;
         try {

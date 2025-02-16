@@ -37,6 +37,10 @@ public class Task {
         return dt1;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public String toCsvFormat() {
         String doneText = this.isDone ? "X" : " ";
         return description + "," + doneText + "," + dt1.format(dateTimeFormatter)+ "," + dt2.format(dateTimeFormatter);
