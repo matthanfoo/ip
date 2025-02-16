@@ -15,6 +15,11 @@ public class Storage {
         this.filename = filename;
     }
 
+    /**
+     * this function reads the data stored in the database and converts each row into a Task object to store
+     * in an ArrayList of Tasks that can be read into a TaskList object
+     * @return          an ArrayList of Tasks
+     */
     public ArrayList<Task> load() {
         File file = new File(filename);
         ArrayList<Task> userInputs = new ArrayList<Task>();
@@ -61,10 +66,14 @@ public class Storage {
         return userInputs;
     }
 
+    /**
+     * this function reads each Task in the TaskList into a format that can be saved as a csv and writes or overwrites
+     * to the file to save the data permanently in the user directory
+     * @param   tasks   a TaskList
+     */
     public void save(TaskList tasks) {
-        String fileName = "ChattyData.csv";
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, false))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename, false))) {
             writer.println("Type,Title,Done,Date1,Date2");
             ArrayList<Task> taskList = tasks.getTasks();
 

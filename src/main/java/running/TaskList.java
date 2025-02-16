@@ -14,6 +14,10 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    /**
+     * this function converts all the tasks stored into a printable, numerated format
+     * @return          a formatted, numerated string of all the tasks
+     */
     public String list() {
 
         String result = "";
@@ -31,6 +35,11 @@ public class TaskList {
         return result;
     }
 
+    /**
+     * this function identifies all tasks that occur / are due today and
+     * converts all the tasks stored into a printable, numerated format
+     * @return          a formatted, numerated string of all the tasks with date matching the current date
+     */
     public String today() {
         String result = "";
         ArrayList<Task> todayTasks = new ArrayList<Task>();
@@ -51,24 +60,49 @@ public class TaskList {
         return result;
     }
 
+    /**
+     * this function creates a Todo object using the provided title
+     * @param   title   the title identified by the Parser
+     * @return          an acknowledgement of the task creation along with task details
+     */
     public String createTodo(String title) {
         Todo t = new Todo(title);
         tasks.add(t);
         return "Got it. I've added this task:\n" + t + "\nNow you have " + tasks.size() + " items in the list.";
     }
 
+    /**
+     * this function creates a Deadline object using the provided title and string representing the deadline
+     * @param   deadlineTitle   the title identified by the Parser
+     * @param   byString        the formatted datetime string representing the deadline for the task
+     * @return                  an acknowledgement of the task creation along with task details
+     */
     public String createDeadline(String deadlineTitle, String byString) {
         Deadline d = new Deadline(deadlineTitle, LocalDateTime.parse(byString, dateTimeFormatter));
         tasks.add(d);
         return "Got it. I've added this task:\n" + d + "\nNow you have " + tasks.size() + " items in the list.";
     }
 
+
+    /**
+     * this function creates a Event object using the provided title and strings representing the start and end time of the event
+     * @param   eventTitle  the title identified by the Parser
+     * @param   fromString  the formatted datetime string representing the starttime for the task
+     * @param   toString    the formatted datetime string representing the endtime for the task
+     * @return              an acknowledgement of the task creation along with task details
+     */
     public String createEvent(String eventTitle, String fromString, String toString) {
         Event e = new Event(eventTitle, LocalDateTime.parse(fromString, dateTimeFormatter), LocalDateTime.parse(toString, dateTimeFormatter));
         tasks.add(e);
         return "Got it. I've added this task:\n" + e + "\nNow you have " + tasks.size() + " items in the list.";
     }
 
+    /**
+     * this function ensures the item to be marked as completed is in the list,
+     * if it is, it marks the event as completed, or else it informs the user the item does not exist
+     * @param   markIndex   an integer representing the index of the item to be marked as completed
+     * @return              an acknowledgement of the task completion or the task not existing
+     */
     public String markTask(int markIndex) {
         if (markIndex < tasks.size()) {
             Task task = tasks.get(markIndex);
@@ -79,6 +113,12 @@ public class TaskList {
         }
     }
 
+    /**
+     * this function ensures the item to be marked as not completed is in the list,
+     * if it is, it marks the event as not completed, or else it informs the user the item does not exist
+     * @param   markIndex   an integer representing the index of the item to be marked as not completed
+     * @return              an acknowledgement of the task de-completion or the task not existing
+     */
     public String unmarkTask(int markIndex) {
         if (markIndex < tasks.size()) {
             Task task = tasks.get(markIndex);
@@ -89,6 +129,12 @@ public class TaskList {
         }
     }
 
+    /**
+     * this function ensures the item to be deleted is in the list,
+     * if it is, it marks the event as deleted, or else it informs the user the item does not exist
+     * @param   delIndex   an integer representing the index of the item to be deleted
+     * @return              an acknowledgement of the task deletion and number of tasks remaining or the task not existing
+     */
     public String deleteTask(int delIndex) {
         if (delIndex < tasks.size()) {
             Task task = tasks.get(delIndex);
@@ -99,6 +145,10 @@ public class TaskList {
         }
     }
 
+    /**
+     * this function returns the underlying ArrayList of Tasks
+     * @return  an ArrayList of Tasks stored in the TaskList
+     */
     public ArrayList<Task> getTasks() {
         return tasks;
     }
