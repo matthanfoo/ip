@@ -39,6 +39,10 @@ public class Storage {
         return t;
     }
 
+    /**
+     * this function converts a csv file of saved data into an ArrayList of Tasks
+     * @return          an ArrayList of Tasks as read from the csv file database
+     */
     public ArrayList<Task> load() {
         File file = new File(filename);
         ArrayList<Task> userInputs = new ArrayList<Task>();
@@ -72,6 +76,10 @@ public class Storage {
         return userInputs;
     }
 
+    /**
+     * this function takes in a TaskList object and reads it into multiple lines in order to save into a csv file
+     * @param tasks          a TaskList containing a list of tasks from the chatbot
+     */
     public void save(TaskList tasks) {
         String fileName = "ChattyData.csv";
 

@@ -16,6 +16,11 @@ public class UI {
         this.br = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     * this function reads the next line from the reader and returns it as a string
+     * @return  the next line from the reader
+     * @throws  if the reader throws an exception
+     */
     public String readCommand() throws IOException {
         // validate and convert command into text
         String command = this.br.readLine();
@@ -25,6 +30,7 @@ public class UI {
     public void printLine() {
         System.out.println("____________________________________________________________");
     }
+
     public void print(String s) {
         System.out.println(s);
         printLine();

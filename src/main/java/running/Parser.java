@@ -8,6 +8,14 @@ import java.util.regex.Pattern;
 public class Parser {
     public Parser() {}
 
+
+    /**
+     * this function takes in a string representing a date and checks if it is in dd-mm-yyyy format and
+     * if the date, month, and year are within reasonable values so that it can be used to create
+     * a valid date time object
+     * @param   date    a string representing only the date of a datetime input
+     * @return          a boolean if the date provided is formatted correctly
+     */
     public static boolean validateDate(String date) {
 
         String regex = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})$";
@@ -17,6 +25,13 @@ public class Parser {
         return matcher.matches();
     }
 
+    /**
+     * this function takes in a string representing a time and checks if it is in HH:mm format and
+     * if the hour and minute are within reasonable values so that it can be used to create
+     * a valid date time object
+     * @param   time    a string representing only the time of a datetime input
+     * @return          a boolean if the time provided is formatted correctly
+     */
     public static boolean validateTime(String time) {
 
         String regex = "^([01][0-9]|2[0-3]):[0-5][0-9]$";
@@ -26,6 +41,13 @@ public class Parser {
         return matcher.matches();
     }
 
+    /**
+     * this function takes in a string containing "mark", attempts to extract the string following the string "mark",
+     * and tries to convert this string to an integer that can be used to index the item indicated
+     * @param   s       a string that contains mark (and ideally a valid integer representing an index)
+     * @return          a non-negative index if a valid integer is found in the command
+     *                  and -1 if the input is not valid and an integer cannot be found
+     */
     public static int parseMark(String s) {
         Pattern p = Pattern.compile("([0-9]+$)");
         Matcher m = p.matcher(s);
@@ -36,12 +58,26 @@ public class Parser {
         return markIndex;
     }
 
+    /**
+     * this function takes in a string containing a full task creation command and extracts the title/name of the task
+     * @param   s       a string representing the full command to create a task
+     * @param   type    a string representing the task the user is trying to create, identified by the execute function
+     * @return          a string representing the title/name of the task the user is trying to create <br>
+     *                  if no title is found, it returns an empty string ""
+     */
     public static String parseTitle(String s, String type) {
         Pattern titlePattern = Pattern.compile(type + "\s*(.*)");
         Matcher titlePatternMatcher = titlePattern.matcher(s);
         return titlePatternMatcher.find() ? titlePatternMatcher.group(1) : "";
     }
 
+    /**
+     * this function takes in any string and a regex pattern and extracts the first sequence that matches the pattern
+     * @param   s       any string of text
+     * @param   regex   a regex pattern for search
+     * @return          the first sequence in s that is matched by regex, <br>
+     *                  if no matches are found it returns an empty string
+     */
     public static String parseRegex(String s, String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(s);
@@ -49,6 +85,13 @@ public class Parser {
     }
 
 
+    /**
+     * this function takes in a possible date-time string and attempts to validate it and
+     * convert it into a valid datetime format string according to "dd-mm-yyyy HH:mm"
+     * @param   input   a string identified as a possible representation of a datetime
+     * @return          a valid datetime formatted string according to "dd-mm-yyyy HH:mm"
+     * @throws  Exception if the date or time provided were not properly formatted or invalid
+     */
     public static String readInputIntoIso(String input) throws Exception {
         // need to throw exception
         // validates expected format either "dd-mm-yyyy" or "dd-mm-yyyy hh:mm" --> return "dd-mm-yyyy hh:mm"
@@ -81,6 +124,17 @@ public class Parser {
 
         return date + " " + time;
     }
+
+
+    /**
+     * this function takes in a command, parses it to identify the action to be taken, executes the action,
+     * then prints a reply to the user and returns a true or false to the chatbot run function to indicate
+     * whether to continue running or terminate
+     * @param   tasks   the current list of tasks
+     * @param   command the input read from the user interface
+     * @param   ui      the user interface used for printing replies
+     * @return          false if the user would like to exit, and true otherwise
+     */
 
     public boolean execute(TaskList tasks, String command, UI ui) {
 
