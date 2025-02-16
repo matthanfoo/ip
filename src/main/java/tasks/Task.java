@@ -57,6 +57,10 @@ public class Task {
         return dt1;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     /**
      * this function converts the task details into a string that can be saved in the csv file
      * @return  task details as comma-separated string

@@ -51,7 +51,7 @@ public class TaskList {
         if (!todayTasks.isEmpty()) {
             result = "Here are your tasks for today: ";
             for (Task task : todayTasks) {
-                result += task;
+                result += task + "\n";
             }
         } else {
             result = "No tasks for today!";
@@ -60,11 +60,6 @@ public class TaskList {
         return result;
     }
 
-    /**
-     * this function creates a Todo object using the provided title
-     * @param   title   the title identified by the Parser
-     * @return          an acknowledgement of the task creation along with task details
-     */
     public String createTodo(String title) {
         Todo t = new Todo(title);
         tasks.add(t);
@@ -143,6 +138,35 @@ public class TaskList {
         } else {
             return "Invalid index: " + delIndex;
         }
+    }
+
+    /**
+     * this function takes in a string findText and finds all tasks
+     * containining findText (case-insensitive) in its description and returns a readbale list as a string
+     * @param   findText    a string containing target text to search for
+     * @return              a list of all tasks containing findText
+     */
+
+    public String find(String findText) {
+        String result = "";
+        ArrayList<Task> findTasks = new ArrayList<Task>();
+
+        for (Task task : tasks) {
+            if (Pattern.compile(Pattern.quote(findText), Pattern.CASE_INSENSITIVE).matcher(task.getDescription()).find()) {
+                findTasks.add(task);
+            }
+        }
+
+        if (!findTasks.isEmpty()) {
+            result = "Here are the matching tasks in your list: ";
+            for (Task task : findTasks) {
+                result += "\n" + task;
+            }
+        } else {
+            result = "No tasks matching your search were found.";
+        }
+
+        return result;
     }
 
     /**
