@@ -1,14 +1,21 @@
 package running;
-import tasks.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tasks.Deadline;
+import tasks.Event;
+import tasks.Task;
+import tasks.Todo;
+
+/**
+ * TaskList is a class that contains an underlying ArrayList of Task objects, with methods to edit and filter the list
+ * of tasks and convert the list into readable/printable strings
+ */
 public class TaskList {
-    ArrayList<Task> tasks;
-    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private ArrayList<Task> tasks;
 
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
@@ -60,6 +67,11 @@ public class TaskList {
         return result;
     }
 
+    /**
+     * this function creates a Todo object using the provided title
+     * @param   title   the title identified by the Parser
+     * @return                  an acknowledgement of the task creation along with task details
+     */
     public String createTodo(String title) {
         Todo t = new Todo(title);
         tasks.add(t);
@@ -78,16 +90,17 @@ public class TaskList {
         return "Got it. I've added this task:\n" + d + "\nNow you have " + tasks.size() + " items in the list.";
     }
 
-
     /**
-     * this function creates a Event object using the provided title and strings representing the start and end time of the event
+     * this function creates a Event object using the provided title and
+     * strings representing the start and end time of the event
      * @param   eventTitle  the title identified by the Parser
      * @param   fromString  the formatted datetime string representing the starttime for the task
      * @param   toString    the formatted datetime string representing the endtime for the task
      * @return              an acknowledgement of the task creation along with task details
      */
     public String createEvent(String eventTitle, String fromString, String toString) {
-        Event e = new Event(eventTitle, LocalDateTime.parse(fromString, dateTimeFormatter), LocalDateTime.parse(toString, dateTimeFormatter));
+        Event e = new Event(eventTitle, LocalDateTime.parse(fromString, dateTimeFormatter),
+                LocalDateTime.parse(toString, dateTimeFormatter));
         tasks.add(e);
         return "Got it. I've added this task:\n" + e + "\nNow you have " + tasks.size() + " items in the list.";
     }
@@ -128,13 +141,15 @@ public class TaskList {
      * this function ensures the item to be deleted is in the list,
      * if it is, it marks the event as deleted, or else it informs the user the item does not exist
      * @param   delIndex   an integer representing the index of the item to be deleted
-     * @return              an acknowledgement of the task deletion and number of tasks remaining or the task not existing
+     * @return             an acknowledgement of the task deletion and number of tasks remaining
+     *                     or information that the task does not exist
      */
     public String deleteTask(int delIndex) {
         if (delIndex < tasks.size()) {
             Task task = tasks.get(delIndex);
             tasks.remove(delIndex);
-            return "Noted. I've removed this task:\n   " + task + "\n Now you have " + tasks.size() + " items in the list.";
+            return "Noted. I've removed this task:\n   " + task
+                    + "\n Now you have " + tasks.size() + " items in the list.";
         } else {
             return "Invalid index: " + delIndex;
         }
@@ -152,7 +167,8 @@ public class TaskList {
         ArrayList<Task> findTasks = new ArrayList<Task>();
 
         for (Task task : tasks) {
-            if (Pattern.compile(Pattern.quote(findText), Pattern.CASE_INSENSITIVE).matcher(task.getDescription()).find()) {
+            if (Pattern.compile(Pattern.quote(findText), Pattern.CASE_INSENSITIVE)
+                    .matcher(task.getDescription()).find()) {
                 findTasks.add(task);
             }
         }
@@ -182,4 +198,3 @@ public class TaskList {
 
 
 }
-

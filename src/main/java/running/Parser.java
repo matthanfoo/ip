@@ -1,10 +1,12 @@
 package running;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser uses its main function (execute) to break down a string of user input into specific commands and details
+ * to be passed into other functions and returns a signal to the user interface (UI) whether
+ * to continue accepting input
+ */
 public class Parser {
     public Parser() {}
 
@@ -171,7 +173,7 @@ public class Parser {
                     fromString = readInputIntoIso(fromString);
                     toString = readInputIntoIso(toString);
                     printText = tasks.createEvent(eventTitle, fromString, toString);
-                } catch (Exception e){
+                } catch (Exception e) {
                     printText = e.getMessage();
                 }
             }
@@ -184,7 +186,7 @@ public class Parser {
                 try {
                     byString = readInputIntoIso(byString);
                     printText = tasks.createDeadline(deadlineTitle, byString);
-                } catch (Exception e){
+                } catch (Exception e) {
                     printText = e.getMessage();
                 }
             }

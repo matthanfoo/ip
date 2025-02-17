@@ -1,6 +1,9 @@
 package tasks;
 import java.time.LocalDateTime;
 
+/**
+ * Deadline is a subclass of Task with a by datetime
+ */
 public class Deadline extends Task {
 
     public Deadline(String description, LocalDateTime by) {
@@ -12,6 +15,7 @@ public class Deadline extends Task {
         return "[D]" + super.toString() + " (by: " + dt1 + ")";
     }
 
+    @Override
     public String toCsvFormat() {
         return "D," + super.toCsvFormat();
     }

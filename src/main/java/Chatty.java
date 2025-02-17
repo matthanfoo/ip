@@ -1,13 +1,23 @@
-import tasks.*;
-import running.*;
+import running.Parser;
+import running.Storage;
+import running.TaskList;
+import running.UI;
 
+/**
+ * Runs the bot through the UI object instantiated when the main function is run
+ */
 public class Chatty {
 
+    private static final String filePath = "ChattyData.csv";
     private Storage storage;
     private TaskList tasks;
     private UI ui;
 
-    public Chatty(String filePath) {
+    /**
+     * use the default filePath to read in any stored in the file corresponding to the filePath into a Storage object
+     * which is then read into a TaskList object and passed to the UI to use when interacting with the user
+     */
+    public Chatty() {
         storage = new Storage(filePath);
         tasks = new TaskList(storage.load());
         ui = new UI(storage, tasks);
@@ -39,6 +49,6 @@ public class Chatty {
     }
 
     public static void main(String[] args) {
-        new Chatty("ChattyData.csv").run();
+        new Chatty().run();
     }
 }
