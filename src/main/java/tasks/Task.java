@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Task {
 
-    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    protected static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     protected String description;
     protected boolean isDone;
     protected LocalDateTime dt1;

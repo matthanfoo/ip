@@ -68,9 +68,9 @@ public class Parser {
      *                  if no title is found, it returns an empty string ""
      */
     public static String parseTitle(String s, String type) {
-        Pattern titlePattern = Pattern.compile(type + "\s*(.*)");
+        Pattern titlePattern = Pattern.compile(type + "\\s+([^/]+)");
         Matcher titlePatternMatcher = titlePattern.matcher(s);
-        return titlePatternMatcher.find() ? titlePatternMatcher.group(1) : "";
+        return titlePatternMatcher.find() ? titlePatternMatcher.group(1).trim() : "";
     }
 
     /**
@@ -134,15 +134,15 @@ public class Parser {
      * whether to continue running or terminate
      * @param   tasks   the current list of tasks
      * @param   command the input read from the user interface
-     * @param   ui      the user interface used for printing replies
+//     * @param   ui      the user interface used for printing replies
      * @return          false if the user would like to exit, and true otherwise
      */
 
-    public boolean execute(TaskList tasks, String command, UI ui) {
+    public String execute(TaskList tasks, String command) {
 
         String printText = "";
         if (command.equalsIgnoreCase("bye")) {
-            return false;
+            return "bye";
         } else if (command.equalsIgnoreCase("list")) {
             printText = tasks.list();
         } else if (command.equalsIgnoreCase("today")) {
@@ -193,8 +193,7 @@ public class Parser {
         } else {
             printText = "Invalid command";
         }
-        ui.print(printText);
-        return true;
+        return printText;
     }
 
 }

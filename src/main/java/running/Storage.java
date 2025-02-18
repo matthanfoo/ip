@@ -21,12 +21,11 @@ import tasks.Todo;
  */
 public class Storage {
 
-    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-    private String filename;
+    private static final String fileName = "ChattyData.csv";
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public Storage(String filename) {
-        this.filename = filename;
-    }
+    public Storage() {}
+
 
     /**
      * this function takes in a string array of items in a row downloaded from a csv,
@@ -65,13 +64,13 @@ public class Storage {
      * @return          an ArrayList of Tasks as read from the csv file database
      */
     public ArrayList<Task> load() {
-        File file = new File(filename);
+        File file = new File(fileName);
         ArrayList<Task> userInputs = new ArrayList<Task>();
 
         if (file.exists()) {
             System.out.println("File exists, reading contents...");
 
-            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] row = line.split(","); // Splitting by comma
@@ -85,7 +84,7 @@ public class Storage {
         } else {
             System.out.println("File does not exist, creating new CSV...");
 
-            try (FileWriter writer = new FileWriter(filename)) {
+            try (FileWriter writer = new FileWriter(fileName)) {
                 System.out.println("CSV file written successfully.");
             } catch (IOException e) {
                 System.out.println("Error writing to file.");
@@ -101,10 +100,8 @@ public class Storage {
      * @param tasks          a TaskList containing a list of tasks from the chatbot
      */
     public void save(TaskList tasks) {
-        String fileName = "ChattyData.csv";
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, false))) {
-            writer.println("Type,Title,Done,Date1,Date2");
             ArrayList<Task> taskList = tasks.getTasks();
 
             for (Task task : taskList) {
