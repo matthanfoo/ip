@@ -22,31 +22,6 @@ public class Chatty {
     }
 
     /**
-     * this function initialises a new Parser object and starts uses the user interface to welcome the user
-     * to the chatbot and read any further input until the user chooses to exit the chatbot
-     */
-//    public void run() {
-//
-//
-//        boolean running = true;
-//        try {
-//            ui.print("Hello! I'm Chatty McChatface");
-//            ui.print("What can I do for you?");
-//            while (running) {
-//                String command = ui.readCommand();
-//                ui.printLine();
-//                running =
-//            }
-//            storage.save(tasks);
-//            ui.print("Data saved successfully. Goodbye!");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            ui.printLine();
-//        }
-//    }
-
-    /**
      * Generates a response for the user's chat message.
      */
     public String getResponse(String input) {
