@@ -35,7 +35,4 @@ public class Chatty {
         storage.save(tasks);
     }
 
-//    public static void main(String[] args) {
-//        new Chatty().run();
-//    }
 }
