@@ -62,12 +62,14 @@ public class Parser {
 
     /**
      * this function takes in a string containing a full task creation command and extracts the title/name of the task
-     * @param   s       a string representing the full command to create a task
-     * @param   type    a string representing the task the user is trying to create, identified by the execute function
-     * @return          a string representing the title/name of the task the user is trying to create <br>
-     *                  if no title is found, it returns an empty string ""
+     * @param   s           a string representing the full command to create a task
+     * @param   taskType    an integer representing the task the user is trying to create
+     *                      (1 - todo, 2 - event, 3 - deadline)
+     * @return              a string representing the title/name of the task the user is trying to create <br>
+     *                      if no title is found, it returns an empty string ""
      */
-    public static String parseTitle(String s, String type) {
+    public static String parseTitle(String s, int taskType) {
+        String type = taskType == 1 ? "todo" : (taskType == 2 ? "event" : "deadline");
         Pattern titlePattern = Pattern.compile(type + "\\s+([^/]+)");
         Matcher titlePatternMatcher = titlePattern.matcher(s);
         return titlePatternMatcher.find() ? titlePatternMatcher.group(1).trim() : "";
@@ -85,7 +87,6 @@ public class Parser {
         Matcher m = p.matcher(s);
         return m.find() ? m.group(1) : "";
     }
-
 
     /**
      * this function takes in a possible date-time string and attempts to validate it and
@@ -127,14 +128,62 @@ public class Parser {
         return date + " " + time;
     }
 
+    /**
+     * this function handles a command that intends to create a task
+     * @param   command     a command identified by the parser execute function as trying to create a task
+     * @param   tasks       a TaskList holding all current events that new tasks can be added to
+     * @param   taskType    an integer representing the task the user is trying to create
+     *                      (1 - todo, 2 - event, 3 - deadline)
+     * @return              the output (acknowledgement or error) from the creation of a Task
+     */
+    public static String handleTaskCommand(String command, TaskList tasks, int taskType) {
+        String title = parseTitle(command, taskType);
+        String printText;
+
+        if (title.equals("")) {
+            return "Invalid task title";
+        }
+
+        switch (taskType) {
+        case 1:
+            printText = tasks.createTodo(title);
+            break;
+
+        case 2:
+            String fromString = parseRegex(command, "/from\\s*(.*?)\\s+/");
+            String toString = parseRegex(command, "/to\\s*(.*)");
+            try {
+                fromString = readInputIntoIso(fromString);
+                toString = readInputIntoIso(toString);
+                printText = tasks.createEvent(title, fromString, toString);
+            } catch (Exception e) {
+                printText = e.getMessage();
+            }
+            break;
+
+        case 3:
+            String byString = parseRegex(command, "/by\\s*(.*)");
+            try {
+                byString = readInputIntoIso(byString);
+                printText = tasks.createDeadline(title, byString);
+            } catch (Exception e) {
+                printText = e.getMessage();
+            }
+            break;
+
+        default:
+            return "Invalid task title";
+        }
+
+        return printText;
+    }
+
 
     /**
      * this function takes in a command, parses it to identify the action to be taken, executes the action,
-     * then prints a reply to the user and returns a true or false to the chatbot run function to indicate
-     * whether to continue running or terminate
+     * then returns a reply to the main method to send/display to the user
      * @param   tasks   the current list of tasks
      * @param   command the input read from the user interface
-//     * @param   ui      the user interface used for printing replies
      * @return          false if the user would like to exit, and true otherwise
      */
 
@@ -160,40 +209,14 @@ public class Parser {
             String findText = parseRegex(command, "find\s*(.*)");
             printText = tasks.find(findText);
         } else if (command.contains("todo")) {
-            String todoTitle = parseTitle(command, "todo");
-            printText = todoTitle.equals("") ? "Invalid task title" : tasks.createTodo(todoTitle);
+            handleTaskCommand(command, tasks, 1);
         } else if (command.contains("event")) {
-            String eventTitle = parseTitle(command, "event");
-            if (eventTitle.equals("")) {
-                printText = "Invalid event title";
-            } else {
-                String fromString = parseRegex(command, "/from\s*(.*?)\s+/");
-                String toString = parseRegex(command, "/to\\s*(.*)");
-                try {
-                    fromString = readInputIntoIso(fromString);
-                    toString = readInputIntoIso(toString);
-                    printText = tasks.createEvent(eventTitle, fromString, toString);
-                } catch (Exception e) {
-                    printText = e.getMessage();
-                }
-            }
+            handleTaskCommand(command, tasks, 2);
         } else if (command.contains("deadline")) {
-            String deadlineTitle = parseTitle(command, "deadline");
-            if (deadlineTitle.equals("")) {
-                printText = "Invalid deadline title";
-            } else {
-                String byString = parseRegex(command, "/by\\s*(.*)");
-                try {
-                    byString = readInputIntoIso(byString);
-                    printText = tasks.createDeadline(deadlineTitle, byString);
-                } catch (Exception e) {
-                    printText = e.getMessage();
-                }
-            }
+            handleTaskCommand(command, tasks, 3);
         } else {
             printText = "Invalid command";
         }
         return printText;
     }
-
 }

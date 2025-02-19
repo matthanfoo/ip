@@ -60,6 +60,39 @@ public class Storage {
     }
 
     /**
+     * this function creates a new csv file with the private final static filename and returns either a message
+     * informing about success or failure of file creation
+     * @return             file creation success or fail
+     * @throws IOException if error writing to file
+     */
+    public String createNewFile() {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            return "CSV file written successfully.";
+        } catch (IOException e) {
+            return "Error writing to file. \n" + e.getMessage();
+        }
+    }
+
+    /**
+     * this function reads a csv file into a string line by line and converts each line into a Task to be added
+     * into an ArrayList of Tasks
+     * @return             an ArrayList of Tasks read from the csv file
+     * @throws Exception   if error reading from file
+     */
+    public ArrayList<Task> readFileToTasks() throws Exception {
+        ArrayList<Task> taskList = new ArrayList<Task>();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] row = line.split(","); // Splitting by comma
+            taskList.add(readRowToTask(row));
+        }
+
+        return taskList;
+    }
+
+    /**
      * this function converts a csv file of saved data into an ArrayList of Tasks
      * @return          an ArrayList of Tasks as read from the csv file database
      */
@@ -69,27 +102,16 @@ public class Storage {
 
         if (file.exists()) {
             System.out.println("File exists, reading contents...");
-
-            try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    String[] row = line.split(","); // Splitting by comma
-                    userInputs.add(readRowToTask(row));
-                }
+            try {
+                userInputs = readFileToTasks();
             } catch (Exception e) {
-                System.out.println("Error reading the file.");
+                System.out.println("Error reading file");
                 e.printStackTrace();
             }
 
         } else {
             System.out.println("File does not exist, creating new CSV...");
-
-            try (FileWriter writer = new FileWriter(fileName)) {
-                System.out.println("CSV file written successfully.");
-            } catch (IOException e) {
-                System.out.println("Error writing to file.");
-                e.printStackTrace();
-            }
+            createNewFile();
         }
 
         return userInputs;
