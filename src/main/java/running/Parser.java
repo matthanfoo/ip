@@ -191,10 +191,16 @@ public class Parser {
 
         String printText = "";
         if (command.equalsIgnoreCase("bye")) {
+            assert command.trim().equals("bye"):
+                    "command should only contain bye (not strict). command was: " + command;
             return "bye";
         } else if (command.equalsIgnoreCase("list")) {
+            assert command.trim().equals("list"):
+                    "command should only contain list (not strict). command was: " + command;
             printText = tasks.list();
         } else if (command.equalsIgnoreCase("today")) {
+            assert command.trim().equals("today"):
+                    "command should only contain today (not strict). command was: " + command;
             printText = tasks.today();
         } else if (command.contains("unmark")) {
             int markIndex = parseMark(command);

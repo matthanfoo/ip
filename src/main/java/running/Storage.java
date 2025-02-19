@@ -35,7 +35,9 @@ public class Storage {
      * @throws Exception if the task is not either a todo, deadline, or an event
      */
     public Task readRowToTask(String[] row) throws Exception {
+        assert row.length == 5: "row must contain exactly 5 elements";
         Task t;
+
         if (row[0].equals("T")) {
             t = new Todo(row[1]);
             if (row[2].equals("X")) {

@@ -27,8 +27,8 @@ public class TaskListTest {
     }
     @Test
     public void parseMark_returnsDigit() {
-        assertEquals(Parser.parseMark("mark 3"), 3);
-        assertEquals(Parser.parseMark("unmark 31"), 31);
+        assertEquals(Parser.parseIndex("mark 3"), 3);
+        assertEquals(Parser.parseIndex("unmark 31"), 31);
     }
 
     @Test
