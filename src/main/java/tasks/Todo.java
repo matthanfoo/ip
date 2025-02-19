@@ -25,4 +25,9 @@ public class Todo extends Task {
     public String toCsvFormat() {
         return "T," + super.toCsvFormat();
     }
+
+    @Override
+    public Todo createRecur(String recurType) throws IllegalArgumentException {
+        return this;
+    }
 }
