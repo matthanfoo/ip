@@ -142,10 +142,16 @@ public class Parser {
 
         String printText = "";
         if (command.equalsIgnoreCase("bye")) {
+            assert command.trim().equals("bye"):
+                    "command should only contain bye (not strict). command was: " + command;
             return "bye";
         } else if (command.equalsIgnoreCase("list")) {
+            assert command.trim().equals("list"):
+                    "command should only contain list (not strict). command was: " + command;
             printText = tasks.list();
         } else if (command.equalsIgnoreCase("today")) {
+            assert command.trim().equals("today"):
+                    "command should only contain today (not strict). command was: " + command;
             printText = tasks.today();
         } else if (command.contains("unmark")) {
             int markIndex = parseMark(command);
@@ -161,6 +167,7 @@ public class Parser {
             printText = tasks.find(findText);
         } else if (command.contains("todo")) {
             String todoTitle = parseTitle(command, "todo");
+            assert !todoTitle.contains(",") : "title cannot contain a comma for csv reasons";
             printText = todoTitle.equals("") ? "Invalid task title" : tasks.createTodo(todoTitle);
         } else if (command.contains("event")) {
             String eventTitle = parseTitle(command, "event");
@@ -170,6 +177,7 @@ public class Parser {
                 String fromString = parseRegex(command, "/from\s*(.*?)\s+/");
                 String toString = parseRegex(command, "/to\\s*(.*)");
                 try {
+                    assert !eventTitle.contains(",") : "title cannot contain a comma for csv reasons";
                     fromString = readInputIntoIso(fromString);
                     toString = readInputIntoIso(toString);
                     printText = tasks.createEvent(eventTitle, fromString, toString);
@@ -184,6 +192,7 @@ public class Parser {
             } else {
                 String byString = parseRegex(command, "/by\\s*(.*)");
                 try {
+                    assert !deadlineTitle.contains(",") : "title cannot contain a comma for csv reasons";
                     byString = readInputIntoIso(byString);
                     printText = tasks.createDeadline(deadlineTitle, byString);
                 } catch (Exception e) {

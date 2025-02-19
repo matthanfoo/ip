@@ -91,7 +91,7 @@ public class TaskList {
     }
 
     /**
-     * this function creates a Event object using the provided title and
+     * this function creates an Event object using the provided title and
      * strings representing the start and end time of the event
      * @param   eventTitle  the title identified by the Parser
      * @param   fromString  the formatted datetime string representing the starttime for the task
@@ -163,6 +163,7 @@ public class TaskList {
      */
 
     public String find(String findText) {
+        assert !findText.equals("") : "empty findText field";
         String result = "";
         ArrayList<Task> findTasks = new ArrayList<Task>();
 
