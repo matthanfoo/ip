@@ -1,10 +1,12 @@
 package running;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser uses its main function (execute) to break down a string of user input into specific commands and details
+ * to be passed into other functions and returns a signal to the user interface (UI) whether
+ * to continue accepting input
+ */
 public class Parser {
     public Parser() {}
 
@@ -66,9 +68,9 @@ public class Parser {
      *                  if no title is found, it returns an empty string ""
      */
     public static String parseTitle(String s, String type) {
-        Pattern titlePattern = Pattern.compile(type + "\s*(.*)");
+        Pattern titlePattern = Pattern.compile(type + "\\s+([^/]+)");
         Matcher titlePatternMatcher = titlePattern.matcher(s);
-        return titlePatternMatcher.find() ? titlePatternMatcher.group(1) : "";
+        return titlePatternMatcher.find() ? titlePatternMatcher.group(1).trim() : "";
     }
 
     /**
@@ -132,18 +134,24 @@ public class Parser {
      * whether to continue running or terminate
      * @param   tasks   the current list of tasks
      * @param   command the input read from the user interface
-     * @param   ui      the user interface used for printing replies
+//     * @param   ui      the user interface used for printing replies
      * @return          false if the user would like to exit, and true otherwise
      */
 
-    public boolean execute(TaskList tasks, String command, UI ui) {
+    public String execute(TaskList tasks, String command) {
 
         String printText = "";
         if (command.equalsIgnoreCase("bye")) {
-            return false;
+            assert command.trim().equals("bye"):
+                    "command should only contain bye (not strict). command was: " + command;
+            return "bye";
         } else if (command.equalsIgnoreCase("list")) {
+            assert command.trim().equals("list"):
+                    "command should only contain list (not strict). command was: " + command;
             printText = tasks.list();
         } else if (command.equalsIgnoreCase("today")) {
+            assert command.trim().equals("today"):
+                    "command should only contain today (not strict). command was: " + command;
             printText = tasks.today();
         } else if (command.contains("unmark")) {
             int markIndex = parseMark(command);
@@ -159,6 +167,7 @@ public class Parser {
             printText = tasks.find(findText);
         } else if (command.contains("todo")) {
             String todoTitle = parseTitle(command, "todo");
+            assert !todoTitle.contains(",") : "title cannot contain a comma for csv reasons";
             printText = todoTitle.equals("") ? "Invalid task title" : tasks.createTodo(todoTitle);
         } else if (command.contains("event")) {
             String eventTitle = parseTitle(command, "event");
@@ -168,10 +177,11 @@ public class Parser {
                 String fromString = parseRegex(command, "/from\s*(.*?)\s+/");
                 String toString = parseRegex(command, "/to\\s*(.*)");
                 try {
+                    assert !eventTitle.contains(",") : "title cannot contain a comma for csv reasons";
                     fromString = readInputIntoIso(fromString);
                     toString = readInputIntoIso(toString);
                     printText = tasks.createEvent(eventTitle, fromString, toString);
-                } catch (Exception e){
+                } catch (Exception e) {
                     printText = e.getMessage();
                 }
             }
@@ -182,17 +192,17 @@ public class Parser {
             } else {
                 String byString = parseRegex(command, "/by\\s*(.*)");
                 try {
+                    assert !deadlineTitle.contains(",") : "title cannot contain a comma for csv reasons";
                     byString = readInputIntoIso(byString);
                     printText = tasks.createDeadline(deadlineTitle, byString);
-                } catch (Exception e){
+                } catch (Exception e) {
                     printText = e.getMessage();
                 }
             }
         } else {
             printText = "Invalid command";
         }
-        ui.print(printText);
-        return true;
+        return printText;
     }
 
 }
