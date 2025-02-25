@@ -1,8 +1,6 @@
 # Chatty User Guide
 
-// Update the title above to match the actual product name
-
-(/assets/images/electrocat.png)
+![a screenshot of the user interface](/assets/images/UI.png)
 
 Chatty helps you manage your everyday tasks, from to-dos to events and deadlines
 
