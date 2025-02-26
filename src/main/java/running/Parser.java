@@ -44,20 +44,21 @@ public class Parser {
     }
 
     /**
-     * this function takes in a string containing "mark", attempts to extract the string following the string "mark",
+     * this function takes in a string intended to contain an item index,
+     * attempts to extract the first string to contain a sequence of digits,
      * and tries to convert this string to an integer that can be used to index the item indicated
-     * @param   s       a string that contains mark (and ideally a valid integer representing an index)
+     * @param   s       a string that contains a valid integer representing an index
      * @return          a non-negative index if a valid integer is found in the command
      *                  and -1 if the input is not valid and an integer cannot be found
      */
-    public static int parseMark(String s) {
+    public static int parseIndex(String s) {
         Pattern p = Pattern.compile("([0-9]+$)");
         Matcher m = p.matcher(s);
-        int markIndex = -1;
+        int index = -1;
         if (m.find()) {
-            markIndex = Integer.parseInt(m.group(1)) - 1;
+            index = Integer.parseInt(m.group(1)) - 1;
         }
-        return markIndex;
+        return index;
     }
 
     /**
@@ -203,17 +204,22 @@ public class Parser {
                     "command should only contain today (not strict). command was: " + command;
             printText = tasks.today();
         } else if (command.contains("unmark")) {
-            int markIndex = parseMark(command);
+            int markIndex = parseIndex(command);
             printText = markIndex < 0 ? "Invalid input" : tasks.unmarkTask(markIndex);
         } else if (command.contains("mark")) {
-            int markIndex = parseMark(command);
+            int markIndex = parseIndex(command);
             printText = markIndex < 0 ? "Invalid input" : tasks.markTask(markIndex);
         } else if (command.contains("delete")) {
-            int markIndex = parseMark(command);
+            int markIndex = parseIndex(command);
             printText = markIndex < 0 ? "Invalid input" : tasks.deleteTask(markIndex);
         } else if (command.contains("find")) {
             String findText = parseRegex(command, "find\s*(.*)");
             printText = tasks.find(findText);
+        } else if (command.contains("recur")) {
+            int recurIndex = parseIndex(command);
+            String recurType = parseRegex(command, "/by\\s*(\\w+)");
+            int recurCount = Integer.parseInt(parseRegex(command, "/for\\s*(\\d+)"));
+            printText = tasks.recur(recurIndex, recurType, recurCount);
         } else if (command.contains("todo")) {
             handleTaskCommand(command, tasks, 1);
         } else if (command.contains("event")) {

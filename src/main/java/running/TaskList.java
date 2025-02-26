@@ -186,6 +186,59 @@ public class TaskList {
         return result;
     }
 
+
+    /**
+     * this function abstracts the checking of a valid recur type (day/month/week/year)
+     * @param   recurType    a string containing a potentially valid recurType
+     * @return               true if recurType is either d, w, m, or y and false otherwise
+     */
+    public boolean recurTypeCheck(String recurType) {
+        return recurType.equals("d") || recurType.equals("w") || recurType.equals("m") || recurType.equals("y");
+    }
+
+
+    /**
+     * this function recurs a specific Task with a specified interval for a specified number of times
+     * @param   recurIndex   an integer representing the index of the item to be recurred
+     * @param   recurType    a string containing a potentially valid recurType
+     * @param   recurCount   an integer representing the number of times to recur the event for
+     * @return               either a acknowledgement of successful recurrence creation or error message
+     */
+    public String recur(int recurIndex, String recurType, int recurCount) {
+        if (recurIndex >= tasks.size() || recurIndex < 0 || !recurTypeCheck(recurType)) {
+            return recurIndex >= tasks.size() || recurIndex < 0 ? "Invalid index: " + recurIndex
+                    : "Invalid recur type: " + recurType + "\nRecur type must be (d)ay / (m)onth / (w)eek / (y)ear";
+        }
+
+        if (recurIndex < tasks.size()) {
+
+            Task task = tasks.get(recurIndex);
+
+            if (task instanceof Todo) {
+                return "Cannot recur a Todo as it has no date attached";
+            }
+
+            for (int i = 0; i < recurCount; i++) {
+                task = task.createRecur(recurType);
+                tasks.add(task);
+            }
+
+
+            String recurDetail = switch (recurType) {
+            case "d" -> "daily";
+            case "w" -> "weekly";
+            case "m" -> "monthly";
+            case "y" -> "yearly";
+            default -> "";
+            };
+
+            return String.format("Successfully recurred \"%s\" %s for %d occurrences.",
+                    task.getDescription(), recurDetail, recurCount);
+        }
+
+        return "";
+    }
+
     /**
      * this function returns the underlying ArrayList of Tasks
      * @return  an ArrayList of Tasks stored in the TaskList

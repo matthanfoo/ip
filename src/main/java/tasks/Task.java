@@ -76,4 +76,21 @@ public class Task {
         return description + "," + doneText + "," + dt1.format(dateTimeFormatter) + "," + dt2.format(dateTimeFormatter);
     }
 
+    /**
+     * this function creates a new Task with dates shifted forward by the specified recurrence interval
+     * @param   recurType   either d/w/m/y representing the recurrence interval (day/week/month/year)
+     * @return              a new Task with new dates
+     */
+    public Task createRecur(String recurType) throws IllegalArgumentException {
+        return switch (recurType) {
+        case "d" -> new Task(this.description, this.dt1.plusDays(1), this.dt2.plusDays(1));
+        case "w" -> new Task(this.description, this.dt1.plusWeeks(1), this.dt2.plusWeeks(1));
+        case "m" -> new Task(this.description, this.dt1.plusMonths(1), this.dt2.plusMonths(1));
+        case "y" -> new Task(this.description, this.dt1.plusYears(1), this.dt2.plusYears(1));
+        default -> throw new IllegalArgumentException("Invalid recur type: " + recurType
+                + " . Recur type must be (d)ay / (m)onth / (w)eek / (y)ear");
+        };
+
+    }
+
 }
