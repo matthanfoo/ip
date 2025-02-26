@@ -71,7 +71,7 @@ public class Parser {
      */
     public static String parseTitle(String s, int taskType) {
         String type = taskType == 1 ? "todo" : (taskType == 2 ? "event" : "deadline");
-        Pattern titlePattern = Pattern.compile(type +  "\\s+([^/]+)");
+        Pattern titlePattern = Pattern.compile(type + "\\s+([^/]+)");
         Matcher titlePatternMatcher = titlePattern.matcher(s);
         return titlePatternMatcher.find() ? titlePatternMatcher.group(1).trim() : "";
     }
@@ -221,11 +221,11 @@ public class Parser {
             int recurCount = Integer.parseInt(parseRegex(command, "/for\\s*(\\d+)"));
             printText = tasks.recur(recurIndex, recurType, recurCount);
         } else if (command.contains("todo")) {
-            printText = handleTaskCommand(command, tasks, 1);
+            handleTaskCommand(command, tasks, 1);
         } else if (command.contains("event")) {
-            printText = handleTaskCommand(command, tasks, 2);
+            handleTaskCommand(command, tasks, 2);
         } else if (command.contains("deadline")) {
-            printText = handleTaskCommand(command, tasks, 3);
+            handleTaskCommand(command, tasks, 3);
         } else {
             printText = "Invalid command";
         }
